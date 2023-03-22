@@ -34,3 +34,13 @@ type DeleteRequest struct {
 
 type DeleteResponse struct {
 }
+
+type UpdateRequest struct {
+	Password string `json:"password"`
+	Email    string `json:"email"`
+}
+
+type UpdateResponse struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}

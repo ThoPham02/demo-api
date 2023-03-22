@@ -23,6 +23,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodPost,
+				Path:    "/api/register",
+				Handler: AccountRegisterHandler(serverCtx),
+			},
+		},
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
 				Method:  http.MethodGet,
 				Path:    "/api/info",
 				Handler: AccountGetInfoHandler(serverCtx),
@@ -34,19 +44,20 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				Method:  http.MethodPost,
-				Path:    "/api/register",
-				Handler: AccountRegisterHandler(serverCtx),
+				Method:  http.MethodDelete,
+				Path:    "/api/delete",
+				Handler: AccountDeleteHandler(serverCtx),
 			},
 		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				Method:  http.MethodDelete,
-				Path:    "/api/delete",
-				Handler: AccountDeleteHandler(serverCtx),
+				Method:  http.MethodPut,
+				Path:    "/api/update",
+				Handler: AccountUpdateHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
