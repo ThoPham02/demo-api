@@ -4,9 +4,13 @@ import "github.com/zeromicro/go-zero/rest"
 
 type Config struct {
 	rest.RestConf
-	DataSource  string
-	Auth        struct {
+	DataSource string
+	Auth       struct {
 		AccessSecret string
 		AccessExpire int64
+	}
+	RedisCache struct {
+		Host string
+		Port string
 	}
 }

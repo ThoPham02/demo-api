@@ -48,6 +48,7 @@ service api-api {
 
 @server (
 	jwt: Auth
+	middleware: AccessLogMiddleware
 )
 service api-api {
 	@handler AccountGetInfoHandler
@@ -56,14 +57,16 @@ service api-api {
 
 @server (
 	jwt: Auth
+	middleware: AccessLogMiddleware
 )
 service api-api {
 	@handler AccountDeleteHandler
-	delete /api/delete(DeleteRequest) returns ()
+	delete /api/delete(DeleteRequest)
 }
 
 @server (
 	jwt: Auth
+	middleware: AccessLogMiddleware
 )
 service api-api {
 	@handler AccountUpdateHandler

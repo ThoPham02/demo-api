@@ -29,7 +29,7 @@ func NewAccountLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Acco
 }
 
 func (l *AccountLoginLogic) AccountLogin(req *types.LoginRequest) (*types.LoginResponse, error) {
-	l.Logger.Infof("Process Login Account, input: %v", req)
+	l.Logger.Infof("Process Login Account, input: %v", &req)
 	account, err := l.svcCtx.AccountsModel.FindOne(l.ctx, req.Name)
 	if err != nil {
 		if err == model.ErrNotFound {
@@ -42,7 +42,7 @@ func (l *AccountLoginLogic) AccountLogin(req *types.LoginRequest) (*types.LoginR
 	err = utils.VerifyPassword(req.Password, account.HashPassword)
 	if err != nil {
 		l.Logger.Errorf("Failed while verify password, %s", err.Error())
-		return nil, err
+		return nil, errors.New("wrong password")
 	}
 
 	secretKey := l.svcCtx.Config.Auth.AccessSecret
@@ -53,11 +53,13 @@ func (l *AccountLoginLogic) AccountLogin(req *types.LoginRequest) (*types.LoginR
 		l.Logger.Errorf("Failed while getting token: %v", err)
 		return nil, err
 	}
+
 	return &types.LoginResponse{
 		AccessToken: accesstoken,
 	}, nil
 }
 
+// Gen JWT token from secret key, time and user name
 func (l *AccountLoginLogic) getJwtToken(secretKey string, iat, seconds int64, userName string) (string, error) {
 	claims := make(jwt.MapClaims)
 	claims["exp"] = iat + seconds
