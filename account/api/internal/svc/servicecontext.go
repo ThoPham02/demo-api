@@ -14,6 +14,7 @@ import (
 type ServiceContext struct {
 	Config              config.Config
 	AccountsModel       model.AccountsModel
+	SessionsModel       model.SessionsModel
 	RedisCache          redis.Redis
 	AccessLogMiddleware rest.Middleware
 }
@@ -22,6 +23,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:              c,
 		AccountsModel:       model.NewAccountsModel(sqlx.NewMysql(c.DataSource)),
+		SessionsModel:       model.NewSessionsModel(sqlx.NewMysql(c.DataSource)),
 		RedisCache:          *redisCli.NewRedis(c.RedisCache.Host, c.RedisCache.Port),
 		AccessLogMiddleware: middleware.NewAccessLogMiddleware().Handle,
 	}

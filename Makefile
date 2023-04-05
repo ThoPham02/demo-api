@@ -9,6 +9,6 @@ new-service:
 gen-service:
 	goctl api go -api ./account/api/api.api -dir ./account/api
 gen-model:
-	goctl model mysql ddl -src="./account/model/account.sql" -dir="./account/model"
+	goctl model mysql ddl -src="./account/model/*.sql" -dir="./account/model"
 run:
 	go run ./account/api/api.go -f ./account/api/etc/api-api.yaml

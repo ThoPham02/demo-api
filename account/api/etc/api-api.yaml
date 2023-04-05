@@ -4,7 +4,8 @@ Port: 8888
 DataSource: root:secret@tcp(localhost:3306)/demodb
 Auth:
   AccessSecret: 1234567891012345678910123456789q
-  AccessExpire: 9000
+  AccessExpire: 15m
+  RefreshExpire: 24h
 RedisCache:
   Host: "localhost"
   Port: "6379"

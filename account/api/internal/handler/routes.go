@@ -17,11 +17,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/api/login",
 				Handler: AccountLoginHandler(serverCtx),
 			},
-		},
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
 			{
 				Method:  http.MethodPost,
 				Path:    "/api/register",
@@ -39,29 +34,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/api/info",
 					Handler: AccountGetInfoHandler(serverCtx),
 				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AccessLogMiddleware},
-			[]rest.Route{
 				{
 					Method:  http.MethodDelete,
 					Path:    "/api/delete",
 					Handler: AccountDeleteHandler(serverCtx),
 				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AccessLogMiddleware},
-			[]rest.Route{
 				{
 					Method:  http.MethodPut,
 					Path:    "/api/update",

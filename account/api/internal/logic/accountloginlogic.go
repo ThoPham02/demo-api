@@ -46,23 +46,53 @@ func (l *AccountLoginLogic) AccountLogin(req *types.LoginRequest) (*types.LoginR
 	}
 
 	secretKey := l.svcCtx.Config.Auth.AccessSecret
-	iat := time.Now().Unix()
-	seconds := l.svcCtx.Config.Auth.AccessExpire
-	accesstoken, err := l.getJwtToken(secretKey, iat, seconds, account.Name)
+	currentTime := time.Now()
+	iat := currentTime.Unix()
+	accessExp := currentTime.Add(l.svcCtx.Config.Auth.AccessExpire).Unix()
+	accessToken, err := l.getJwtToken(secretKey, iat, accessExp, account.Name)
 	if err != nil {
-		l.Logger.Errorf("Failed while getting token: %v", err)
+		l.Logger.Errorf("Failed while getting access token: %v", err)
+		return nil, err
+	}
+
+	refreshExp := currentTime.Add(l.svcCtx.Config.Auth.RefreshExpire).Unix()
+	refreshToken, err := l.getJwtToken(secretKey, iat, refreshExp, account.Name)
+	if err != nil {
+		l.Logger.Errorf("Failed while getting refresh token: %v", err)
+		return nil, err
+	}
+
+	session, err := l.svcCtx.SessionsModel.Insert(l.ctx, &model.Sessions{
+		UserName:    account.Name,
+		RefeshToken: refreshToken,
+		UserAgent:   "",
+		ClientIp:    "",
+		IsBlocked:   false,
+		ExpiresAt:   refreshExp,
+	})
+	if err != nil {
+		l.Logger.Errorf("Failed while creating session, error: %v", err)
+		return nil, err
+	}
+	sessionId, err := session.RowsAffected()
+	if err != nil {
+		l.Logger.Errorf("Failed while getting session ID, error: %v", err)
 		return nil, err
 	}
 
 	return &types.LoginResponse{
-		AccessToken: accesstoken,
+		SessionID:             sessionId,
+		AccessToken:           accessToken,
+		AccessTokenExpiresAt:  accessExp,
+		RefreshToken:          refreshToken,
+		RefreshTokenExpiresAt: refreshExp,
 	}, nil
 }
 
 // Gen JWT token from secret key, time and user name
-func (l *AccountLoginLogic) getJwtToken(secretKey string, iat, seconds int64, userName string) (string, error) {
+func (l *AccountLoginLogic) getJwtToken(secretKey string, iat, exp int64, userName string) (string, error) {
 	claims := make(jwt.MapClaims)
-	claims["exp"] = iat + seconds
+	claims["exp"] = exp
 	claims["iat"] = iat
 	claims["userName"] = userName
 	token := jwt.New(jwt.SigningMethodHS256)

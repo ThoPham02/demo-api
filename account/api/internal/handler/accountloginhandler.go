@@ -16,7 +16,7 @@ func AccountLoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
-
+		
 		l := logic.NewAccountLoginLogic(r.Context(), svcCtx)
 		resp, err := l.AccountLogin(&req)
 		if err != nil {

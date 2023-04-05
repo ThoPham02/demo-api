@@ -7,7 +7,11 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	AccessToken string `json:"access_token"`
+	SessionID             int64  `json:"session_id"`
+	AccessToken           string `json:"access_token"`
+	AccessTokenExpiresAt  int64  `json:"access_token_expires_at"`
+	RefreshToken          string `json:"refresh_token"`
+	RefreshTokenExpiresAt int64  `json:"refresh_token_expires_at"`
 }
 
 type InfoRequest struct {

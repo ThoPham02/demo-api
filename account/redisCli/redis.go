@@ -6,9 +6,6 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
-// 	// redisdb.Set("test", "hello world")
-// 	// test, err := redisdb.Get("test")
-
 func NewRedis(host string, port string) *redis.Redis {
 	redisdb, err := redis.NewRedis(redis.RedisConf{
 		Type: "none",
