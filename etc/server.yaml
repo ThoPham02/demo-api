@@ -1,0 +1,7 @@
+Name: Server
+Host: 127.0.0.1
+Port: 8888
+Auth:
+  AccessSecret: 1234567891012345678910123456789q
+  AccessExpire: 15m
+  RefreshExpire: 24h

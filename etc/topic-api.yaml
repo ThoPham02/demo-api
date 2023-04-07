@@ -1,0 +1,4 @@
+Name: topic-api
+Host: localhost
+Port: 8888
+DataSource: root:secret@tcp(localhost:3306)/demodb

@@ -4,11 +4,19 @@ createdb:
 	docker exec -it demodb mysql -uroot -psecret -e "CREATE DATABASE demodb"
 dropdb:
 	docker exec -it demodb mysql -uroot -psecret -e "DROP DATABASE demodb"
-new-service:
-	goctl api new -home "." ./account/api
-gen-service:
-	goctl api go -api ./account/api/api.api -dir ./account/api
-gen-model:
-	goctl model mysql ddl -src="./account/model/*.sql" -dir="./account/model"
+new-account-service:
+	goctl api new -home "." ./service/account/api
+new-topic-service:
+	goctl api new -home "." ./service/topic/api
+gen-account-service:
+	goctl api go -api ./api/account.api -dir ./service/account/api
+gen-topic-service:
+	goctl api go -api ./api/topic.api -dir ./service/topic/api
+gen-account-model:
+	goctl model mysql ddl -src="./schema/account.sql" -dir="./service/account/model"
+gen-session-model:
+	goctl model mysql ddl -src="./schema/session.sql" -dir="./service/account/model"
+gen-topic-model:
+	goctl model mysql ddl -src="./schema/topic.sql" -dir="./service/topic/model"
 run:
-	go run ./account/api/api.go -f ./account/api/etc/api-api.yaml
+	go run main.go -f ./etc/server.yaml
