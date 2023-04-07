@@ -3,6 +3,7 @@ package main
 import (
 	"demo-api/config"
 	accountAPI "demo-api/service/account/api"
+	topicAPI "demo-api/service/topic/api"
 
 	"flag"
 	"fmt"
@@ -26,6 +27,9 @@ func main() {
 
 	accountService := accountAPI.NewAccountService(server)
 	accountService.Start()
+
+	topicService := topicAPI.NewTopicService(server)
+	topicService.Start()
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()

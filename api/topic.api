@@ -1,12 +1,22 @@
-type Request {
-	Name string `path:"name,options=you|me"`
-}
+type (
+	GetTopicRequest {
+		UserName string `json:"user_name"`
+	}
+	Topic {
+		ID          int64  `json:"id"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		FileUrl     string `json:"file_url"`
+	}
+	GetTopicResponse {
+		TopicList []Topic `json:"topic_list"`
+	}
+)
 
-type Response {
-	Message string `json:"message"`
-}
-
-service api-api {
-	@handler ApiHandler
-	get /from/:name(Request) returns (Response)
+@server (
+	jwt: Auth
+)
+service topic-api {
+	@handler GetTopicHandler
+	get /api/topics(GetTopicRequest) returns (GetTopicResponse)
 }

@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"demo-api/service/topic/api/internal/config"
@@ -10,7 +10,7 @@ import (
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/api-api.yaml", "the config file")
+var configFile = flag.String("topic-api", "etc/topic-api.yaml", "the config file")
 
 type TopicService struct {
 	C      config.Config
